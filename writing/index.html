@@ -1,0 +1,451 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Aditya Goswami — Writing & Resources."><link rel="canonical" href="https://adityakgoswami.github.io/Portfolio/writing/"><link rel="stylesheet" href="../assets/styles.css"><title>Writing &amp; Resources · Aditya Goswami</title></head><body><header class="site-header"><div class="nav"><a class="brand" href="../"><span class="pulse"></span>Aditya Kumar Goswami</a><button class="menu" aria-label="Menu">Menu</button><nav class="links"><a href="../">Home</a><a href="../about/">About</a><a href="../experience/">Experience</a><a href="../skills/">Skills</a><a href="../ai-security/">AI Security</a><a href="../projects/">Projects</a><a href="../research/">Research</a><a href="../speaking/">Speaking</a><a href="../resources/">Resources</a><a href="../contact/">Contact</a><a href="../extras/">Extras</a></nav></div></header><main><section class="hero"><div class="eyebrow">FULL SOURCE CONTENT</div><h1>Writing &amp; Resources</h1><p class="lead">Original source-index material, retained in full and reorganized for the new GitHub Pages staging site.</p></section><article class="source-section"><div class="section-label">SOURCE MATERIAL</div><pre class="source-copy">Insights &amp; Research
+Articles, CTF Writeups &amp; Talks
+Original research, CTF writeups, case studies and practical guides from the frontlines of enterprise security operations. Published on LinkedIn and Medium — with a full speaking track opening in 2026.
+📰 Now Live on Medium
+Long-form technical breakdowns, incident retrospectives, and AI-in-cybersecurity deep-dives. Follow on Medium for new posts every week.
+Read on Medium →
+📝 LinkedIn Articles
+🚩 CTF Writeups
+🎤 Talks &amp; Slides
+SOC Operations
+Jan 2025
+· 8 min read
+Zero Trust Architecture in Modern SOC Operations
++
+Zero Trust shifts security from the traditional perimeter-based model to an identity-centric &quot;never trust, always verify&quot; framework. After implementing Zero Trust principles at Investis Digital, here&#x27;s what the data showed after 90 days:
+→
+Micro-segmentation limited lateral movement. APT dwell time dropped 68%
+→
+MFA + behavioral analytics reduced credential-based attacks by 73%
+→
+Wazuh ML rules brought MTTD from 4 hours down to 18 minutes
+→
+60% fewer false positives, 85% faster incident containment
+Read full article on LinkedIn →
+Threat Hunting
+Nov 2024
+· 12 min read
+The Art of Proactive Threat Hunting: From Reactive SOC to AI-Augmented Hunter
++
+Most SOC teams are purely reactive, they wait for alerts. This piece documents my transition to proactive threat hunting using AI-generated hypotheses and ML-driven anomaly baselining. Two real discoveries from production environments:
+→
+DGA pattern in DNS queries surfaced a malicious npm package, no alert had triggered
+→
+Exposed S3 bucket with customer PII found via automated OSINT sweep before any breach
+→
+LLM-generated threat intel summaries powering hypothesis-driven hunting frameworks
+→
+ML baselines normal behaviour, anomalies surface within minutes of deviation
+Read full article on LinkedIn →
+Cloud Security
+Sep 2024
+· 10 min read
+Cloud Security Blind Spots: 5 AWS Misconfigurations That Led to Real Breaches
++
+After analyzing 200+ cloud security incidents, the pattern is consistent: most breaches aren&#x27;t zero-days, they&#x27;re misconfigurations that existed for months. Here are the five I see repeatedly in the wild, and exactly how to prevent each:
+1.
+IAM Permission Sprawl: an 18-month-old API key caused a full data exfiltration
+2.
+CloudTrail disabled silently, attacker turned off logging before launching crypto-miner
+3.
+Public S3 exposure. Block Public Access + automated Prowler scanning prevents 90%
+4.
+Security group 0.0.0.0/0, replaced SSH with Systems Manager entirely
+5.
+AI automation (Lambda + Config + Security Hub) catches misconfigs within 4 minutes
+Read full article on LinkedIn →
+AI &amp; Security
+Apr 2025
+· 9 min read
+What Actually Changes When You Put an LLM Inside a SOC Workflow
++
+There&#x27;s a lot of hype and very little specificity about AI in security operations. This piece breaks down exactly where LLMs help, where they don&#x27;t, and what changed measurably after a year of using them daily:
+→
+Report drafting time dropped 70%, but every output still needs a human review pass
+→
+LLMs are excellent at summarizing known patterns, weak at flagging genuinely novel attacker behavior
+→
+The real win was agentic automation (n8n) chaining tool calls together, not chat-based Q&amp;A
+→
+Verification discipline matters more with AI in the loop, not less
+Read full article on LinkedIn →
+GRC
+Feb 2025
+· 7 min read
+ISO 27001:2022 in Practice: What the Audit Doesn&#x27;t Tell You
++
+Passing an ISO 27001 audit and actually running a secure organization are two different things. After supporting a full audit cycle, here&#x27;s where the framework&#x27;s checklist nature creates blind spots:
+→
+Documented controls and operationally enforced controls are not the same thing
+→
+RCA documentation quality predicted audit friction better than control maturity did
+→
+Mapping NIST and CIS alongside ISO closed gaps the ISO checklist alone missed
+→
+The teams that treated GRC as a living process, not an annual event, audited the smoothest
+Read full article on LinkedIn →
+AI &amp; Automation
+Coming to Medium
+· in progress
+Building an Agentic SOC: What n8n Automation Actually Looks Like in Production
++
+My first long-form Medium piece, currently in progress: a real walkthrough of the n8n agent pipelines I run for alert enrichment and triage, including the parts that didn&#x27;t work the first time and what I changed.
+→
+Why a fully autonomous agent was the wrong starting point, and what I built instead
+→
+The exact LLM prompt structure that kept severity scoring consistent across runs
+→
+Where human review still has to stay in the loop, and why that&#x27;s a feature, not a gap
+Follow on LinkedIn for the launch →
+Forensics
+HoLmes CTF 2025
+· HackTheBox
+Reconstructing a Timeline from a Corrupted NTFS Image
++
+This challenge provided a partially corrupted disk image and asked for the exact sequence of attacker actions. The MFT was damaged in several sectors, which ruled out a straightforward timeline tool run.
+1.
+Carved $LogFile entries manually to recover transaction records the MFT had lost
+2.
+Cross-referenced USN Journal entries to fill in gaps around the corrupted timestamps
+3.
+Identified a renamed PowerShell binary used to evade basic filename-based detection
+4.
+Flag recovered by correlating shellbag artifacts with the reconstructed access pattern
+MFTECmd
+NTFS Forensics
+Autopsy
+Web Exploitation
+HackTheBox
+· Medium Difficulty
+Chaining an IDOR with a JWT Algorithm Confusion Bug
++
+A REST API exposed user records via sequential numeric IDs (classic IDOR), but read-only data wasn&#x27;t enough for full compromise, privilege escalation needed a second bug.
+1.
+Enumerated user IDs via the IDOR to harvest a victim&#x27;s public key reference
+2.
+Server accepted both RS256 and HS256, switched algorithm and signed with the public key as an HMAC secret
+3.
+Forged an admin-scoped JWT, bypassing signature verification entirely
+4.
+Root cause: library accepted the &quot;alg&quot; header from the client instead of enforcing server-side config
+Burp Suite
+JWT.io
+Python
+OSINT
+HoLmes CTF 2025
+· Hard Difficulty
+Tracking a Threat Actor Through Reused Infrastructure Metadata
++
+Given only a single malicious domain, the challenge asked for the actor&#x27;s other active infrastructure, a real-world attribution exercise rather than a typical flag hunt.
+1.
+Pivoted from the seed domain&#x27;s SSL certificate fingerprint to find 6 related domains
+2.
+Passive DNS history revealed a shared hosting IP reused across all identified domains
+3.
+Favicon hash matched a known phishing kit, confirming the campaign&#x27;s tooling
+4.
+Flag was the registrant email exposed in an early, unprotected WHOIS snapshot
+crt.sh
+Shodan
+VirusTotal
+Guest Lecture
+2023
+· Parul University
+Cybersecurity Careers &amp; SOC Operations — BSc Students
++
+Invited guest lecture covering real-world cybersecurity career paths, SOC operations, and how to bridge the gap between academic learning and industry expectations — delivered to BSc students at Parul University, Vadodara.
+SOC Operations
+Career Guidance
+Blue Team
+Upcoming
+2026–27
+· CFP Preparing
+Conference Talk — AI-Augmented SOC Operations
++
+Preparing CFP submissions for NULLCON, c0c0n, ClubHack, BSides India, BlackHat Asia, and Hackers Meetup. Talk proposal covers AI-augmented detection engineering with real production examples.
+BSides
+BlackHat
+NULLCON
+Hackers Meetup
+c0c0n
+Live Intelligence
+AI-Powered Threat Trend Tracker
+Weekly-updated cybersecurity trends, CVEs, and threat intel — summarized by AI. This site is a living resource, not a static CV.
+🔴 Critical CVE
+Aug 2026
+CISA KEV Alert: Actively Exploited Vulnerabilities
+Multiple high-severity vulnerabilities added to CISA&#x27;s Known Exploited Vulnerabilities catalog — affecting enterprise VPN solutions and email gateways. Immediate patching advised.
+CISA KEV
+VPN
+Patch Now
+🟠 Threat Actor
+Aug 2026
+AI-Assisted Phishing Campaigns Surge 340%
+Threat actors using LLMs to generate contextually relevant, grammatically perfect spear-phishing emails. Traditional signature-based detection failing at 78% rate. Behavioral AI analysis required.
+AI Threats
+Phishing
+LLM Abuse
+🔵 Detection Tip
+Aug 2026
+MITRE ATT&amp;CK v16 — New Techniques Added
+MITRE ATT&amp;CK v16 released with 12 new techniques covering AI system attacks, deepfake-assisted social engineering, and post-quantum cryptography bypass attempts.
+MITRE ATT&amp;CK
+v16
+Update
+🟠 Industry
+Aug 2026
+Ransomware Groups Targeting APAC Supply Chains
+Multiple ransomware groups shifting focus to APAC technology supply chains — particularly targeting Indian IT service companies and their downstream clients. EDR coverage critical
+Wazuh
+ML
+Sentinel
+🔴 Zero Day
+Jul 2026
+Prompt Injection in Enterprise AI Copilots
+Multiple prompt injection vulnerabilities discovered in enterprise AI copilots deployed in SOC environments — attackers embedding malicious instructions in log data to manipulate AI triage decisions.
+Prompt Injection
+AI Security
+SOC Risk
+Updated weekly · Sources: CISA KEV, NVD, Mandiant, CrowdStrike Intel, MITRE ATT&amp;CK
+View CISA KEV →
+Free Resources
+Resources &amp; Extras
+A weekly briefing and a couple of interactive ways to test yourself, built for anyone curious about cybersecurity, not just recruiters.
+💡 Security Tip of the Day
+🛡️
+Loading today&#x27;s tip...
+📬
+Weekly Threat Briefing
+5 bullet points every week, the CVEs that mattered, one tool worth knowing, and one thing I learned in the SOC. No spam, unsubscribe anytime.
+Subscribe
+🎯 Can You Spot the Phishing Email?
+Question 1 of 5
+Growth Mindset
+Roadmap &amp; Future Direction
+M.S. Cybersecurity is complete. Here are the six directions I&#x27;m actively evaluating and building toward next, each with real progress already underway.
+✓ COMPLETED
+🎓
+M.S. Cybersecurity
+Completed 2024 to 2026 alongside full-time SOC work. Capstone project: CyberShield AI, an AI-based phishing URL detection and malware scanner with LLM-generated threat reports.
+Degree Progress
+100%
+Postgraduate
+AI Capstone
+● ACTIVE
+🤖
+AI Security / AI-Augmented Defense
+Prompt injection defense, LLM security, AI-driven SOC automation, and adversarial ML. The direction I&#x27;m most actively building toward right now, given how much of my daily work already runs through AI tooling.
+Progress
+40%
+AI Security
+Agentic Workflows
+● ACTIVE
+🎯
+Offensive Security / Red Team
+OSCP path, advanced VAPT methodology, and red team operations. Sharpening offensive skills directly strengthens how I think about defense.
+Study Progress
+35%
+OSCP
+Red Team
+NEXT
+☁️
+Cloud Security Architecture
+Multi-cloud security across AWS, Azure, and GCP, Zero Trust design, container and Kubernetes security, and cloud-native SIEM at an architect level.
+Progress
+20%
+AWS
+Zero Trust
+NEXT
+🔍
+DFIR Specialist
+Advanced digital forensics certifications, malware reverse engineering, and deeper incident response specialization beyond current SOC-level DFIR work.
+Progress
+15%
+Forensics
+Malware RE
+PLANNED
+📋
+GRC &amp; Compliance Leadership
+ISO 27001 Lead Implementer, broader risk management frameworks, audit leadership, and a path toward virtual CISO advisory work.
+Progress
+10%
+ISO 27001
+vCISO
+PLANNED
+👔
+Security Leadership / CISO Track
+Security program management, board-level reporting, team leadership, and budget ownership, the long-term direction once the technical foundation across the other tracks is solid.
+Progress
+5%
+Leadership
+2027+ Goal
+Writing &amp; Research
+● Medium Active
+Articles, Blogs &amp; Research
+Long-form technical deep-dives on Medium, LinkedIn thought-leadership posts, and original security research. Follow along as I document real-world SOC engineering, detection logic, and AI-augmented security operations.
+Ⓜ
+Medium
+Long-form technical articles
+→
+in
+LinkedIn
+Thought leadership &amp; SOC insights
+→
+⌥
+GitHub Docs
+Technical write-ups &amp; READMEs
+→
+📰
+Newsletter
+Coming soon — SOC weekly digest
+SOON
+All
+🔵 SOC &amp; Detection
+🤖 AI &amp; Automation
+☁️ Cloud Security
+📋 GRC
+🔬 Research
+Ⓜ Medium
+AI &amp; Automation
+Aug 2026
+· 12 min read
+Building an Agentic SOC: What n8n Automation Actually Looks Like in Production
+A real walkthrough of the n8n agent pipelines I run for alert enrichment and triage — including the parts that didn&#x27;t work the first time and what I changed. Covers LLM prompt structure, where human review stays in the loop, and what agentic actually means in a production SOC.
+n8n
+LLM
+SOC Automation
+Read on Medium →
+Ⓜ Medium
+Detection Engineering
+Aug 2026
+· 10 min read
+Detection-as-Code: Writing Sigma Rules That Actually Work Across 6 SIEMs
+Walk-through of my Detection-as-Code repo — how one Sigma rule translates to native queries for Splunk, Elastic, Sentinel, Defender, CrowdStrike, and QRadar, with all the edge cases that break vendor-specific syntax.
+Sigma
+Detection Eng.
+Multi-SIEM
+Read on Medium →
+Ⓜ Medium
+Purple Team
+Aug 2026
+· 8 min read
+Purple Team Validation: Does Your Detection Rule Actually Catch the Attack?
+Most teams write detection rules and assume they work. This article walks through using Purple-team-validator to test Sigma rules against real Atomic Red Team tests — and the uncomfortable results when rules that &quot;should&quot; fire, don&#x27;t.
+Purple Team
+Atomic Red Team
+Validation
+Read on Medium →
+in LinkedIn
+SOC Operations
+Jan 2025
+· 8 min read
+Zero Trust Architecture in Modern SOC Operations
+After implementing Zero Trust principles at Investis Digital — APT dwell time dropped 68%, MFA + behavioral analytics reduced credential attacks by 73%, and MTTD went from 4 hours to 18 minutes using Wazuh ML rules.
+Zero Trust
+Wazuh
+MTTD
+Read on LinkedIn →
+in LinkedIn
+Threat Hunting
+Nov 2024
+· 12 min read
+The Art of Proactive Threat Hunting: From Reactive SOC to AI-Augmented Hunter
+Documenting my shift from reactive alert-handling to proactive threat hunting using AI-generated hypotheses. Includes two real production discoveries — a DGA pattern in DNS and an exposed S3 bucket — caught before any alert fired.
+Threat Hunting
+AI
+DNS
+Read on LinkedIn →
+in LinkedIn
+Cloud Security
+Sep 2024
+· 10 min read
+Cloud Security Blind Spots: 5 AWS Misconfigurations That Led to Real Breaches
+After analysing 200+ cloud security incidents — most weren&#x27;t zero-days, they were misconfigs that existed for months. Five recurring patterns, what they led to, and the automated remediations that work.
+AWS
+Misconfig
+Prowler
+Read on LinkedIn →
+in LinkedIn
+AI &amp; Security
+Apr 2025
+· 9 min read
+What Actually Changes When You Put an LLM Inside a SOC Workflow
+There&#x27;s a lot of hype and very little specificity about AI in security operations. Report drafting time dropped 70%, but the real win was agentic automation chaining tool calls — not chat-based Q&amp;A.
+LLM
+SOAR
+Automation
+Read on LinkedIn →
+in LinkedIn
+GRC
+Feb 2025
+· 7 min read
+ISO 27001:2022 in Practice: What the Audit Doesn&#x27;t Tell You
+Documented controls and operationally enforced controls are not the same thing — a lesson from supporting a full ISO 27001 audit cycle. The teams treating GRC as a living process, not an annual event, audited the smoothest.
+ISO 27001
+GRC
+Audit
+Read on LinkedIn →
+📝 Coming to Medium
+Research
+In Progress
+MITRE ATLAS in Real AI-Powered SOC Environments
+Documenting findings from the Atlas-purple-team project — how MITRE ATLAS techniques map to actual AI-SOC tooling, what the live dashboard revealed, and what defenders should watch for.
+MITRE ATLAS
+AI Security
+Publishing soon →
+Ⓜ
+Follow on Medium
+New articles on detection engineering, AI-augmented SOC operations, and real-world security research — published regularly.
+Follow on Medium →
+Medium Publication
+● Live
+Articles &amp; Deep-Dives
+Long-form technical writing on SOC engineering, AI in security, detection-as-code, and real incident retrospectives. Published on Medium — where the detail level that LinkedIn can&#x27;t hold goes.
+AG
+@akgoswami185
+SOC Engineer · Detection Engineering · AI in Cybersecurity
+Articles launching Jul–Dec 2026
+Follow on Medium →
+All Articles
+🔵 SOC Ops
+🤖 AI Security
+🛡️ Detection Eng.
+☁️ Cloud
+📋 GRC
+🎯 Career
+Detection Eng.
+SOC Ops
+Coming Soon
+Detection-as-Code: Writing Sigma Rules That Actually Work in Production
+📅 July 2026 · Medium
+Scheduled →
+AI Security
+SOC Ops
+Coming Soon
+What Actually Changes When You Put an LLM Inside a SOC Workflow
+📅 August 2026 · Medium
+Scheduled →
+AI Security
+Purple Team
+Coming Soon
+MITRE ATLAS vs Your SOC: Testing AI Attack Techniques Against Real Defenses
+📅 September 2026 · Medium
+Scheduled →
+Cloud
+Detection Eng.
+Coming Soon
+Microsoft Sentinel from Scratch: Building Detection Rules That Ship to Production
+📅 October 2026 · Medium
+Scheduled →
+GRC
+Compliance
+Coming Soon
+GRC Isn&#x27;t Just Documentation: Building a Live Compliance Platform on GitHub
+📅 November 2026 · Medium
+Scheduled →
+Career
+SOC Ops
+Coming Soon
+From Gold Medallist to SOC Engineer: What 2 Years in Blue Team Actually Taught Me
+📅 December 2026 · Medium
+Scheduled →</pre><div class="source-links"><strong>Referenced links</strong><ul><li><a href="https://medium.com/@akgoswami185" target="_blank" rel="noreferrer">Read on Medium →</a></li><li><a href="https://www.linkedin.com/in/aditya-kumar-goswami" target="_blank" rel="noreferrer">Read full article on LinkedIn →</a></li><li><a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noreferrer">View CISA KEV →</a></li><li><a href="https://github.com/AdityaKGoswami" target="_blank" rel="noreferrer">GitHub Docs →</a></li></ul></div></article></main><footer class="footer"><div class="footerin"><div>© 2026 Aditya Kumar Goswami · Associate SOC Engineer · Gold Medalist · AI-Augmented Security</div><div class="footerlinks"><a href="https://github.com/AdityaKGoswami">GitHub</a><a href="mailto:aadityakgoswami@gmail.com">Email</a></div></div></footer><script src="../assets/site.js"></script></body></html>

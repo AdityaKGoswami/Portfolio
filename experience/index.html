@@ -1,1 +1,135 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Aditya Goswami cybersecurity experience and SOC operations."><link rel="stylesheet" href="../assets/styles.css"><title>Experience · Aditya Goswami</title></head><body><div class="topline"></div><header class="nav"><div class="wrap navin"><a class="brand" href="../">AG<small>Aditya Goswami</small></a><button class="menu">Menu</button><nav class="links"><a href="../">Home</a><a class="active" href="../experience/">Experience</a><a href="../skills/">Skills</a><a href="../projects/">Projects</a><a href="../research/">Research</a><a href="../contact/">Contact</a></nav></div></header><main><section class="pagehero"><div class="wrap"><div class="eyebrow">EXPERIENCE</div><h1>From SOC signals to security systems.</h1><p>Enterprise security operations across monitoring, SIEM/log analysis, cloud monitoring, WAF/perimeter controls, vulnerability assessment and security automation.</p></div></section><section class="section"><div class="wrap split"><div class="card"><div class="kicker">A DAY IN MY SOC</div><div class="metric"><span>Telemetry</span><b>Monitor</b></div><div class="metric"><span>Alert context</span><b>Triage</b></div><div class="metric"><span>Evidence</span><b>Investigate</b></div><div class="metric"><span>Outcome</span><b>Respond</b></div></div><div class="card"><div class="kicker">TOOLING</div><p>Site24x7, AWS CloudWatch, Elastic/Kibana, Wazuh, Cloudflare, WAF, Nessus, Burp Suite and SOC/SOAR workflows appear in the source portfolio.</p><div class="tagrow"><span class="tag">SOC</span><span class="tag">SIEM</span><span class="tag">WAF</span><span class="tag">Cloud</span><span class="tag">VAPT</span></div></div></div></section></main><footer class="footer"><div class="wrap footerin"><div>© 2026 Aditya Goswami</div><div class="footerlinks"><a href="../">Home</a><a href="../projects/">Projects</a><a href="../contact/">Contact</a></div></div></footer><script src="../assets/site.js"></script></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Aditya Goswami — SOC Day & Career Timeline."><link rel="canonical" href="https://adityakgoswami.github.io/Portfolio/experience/"><link rel="stylesheet" href="../assets/styles.css"><title>SOC Day &amp; Career Timeline · Aditya Goswami</title></head><body><header class="site-header"><div class="nav"><a class="brand" href="../"><span class="pulse"></span>Aditya Kumar Goswami</a><button class="menu" aria-label="Menu">Menu</button><nav class="links"><a href="../">Home</a><a href="../about/">About</a><a href="../experience/">Experience</a><a href="../skills/">Skills</a><a href="../ai-security/">AI Security</a><a href="../projects/">Projects</a><a href="../writing/">Writing</a><a href="../speaking/">Speaking</a><a href="../research/">Research</a><a href="../resources/">Resources</a><a href="../contact/">Contact</a><a href="../extras/">Extras</a></nav></div></header><main><section class="hero"><div class="eyebrow">FULL SOURCE CONTENT</div><h1>SOC Day &amp; Career Timeline</h1><p class="lead">Original source-index material, retained in full and reorganized for the new GitHub Pages staging site.</p></section><article class="source-section"><div class="section-label">SOURCE MATERIAL</div><pre class="source-copy">Behind the Dashboard
+A Day in My SOC
+What &quot;SOC Engineer&quot; actually looks like, hour by hour, for anyone who&#x27;s never sat behind the glass. A real day touches a dozen tools, three security domains, and AI runs through almost all of it.
+07:45
+☕
+Shift Handover &amp; Overnight Triage
+Review overnight alerts queued across Kibana, Wazuh, and Microsoft Sentinel. Cross-check Suricata and Sysmon telemetry, prioritize by severity using risk-based alerting, and flag anything needing escalation before the team standup.
+Kibana
+Wazuh
+Sentinel
+Suricata
+Sysmon
+08:30
+🌅
+Morning Planning, AI-Assisted
+Before diving into tickets, I ask Gemini and ChatGPT to summarize overnight CVE disclosures relevant to our stack and draft a rough priority order for the day. Five minutes of AI delegation that used to take 30 minutes of manual reading.
+Gemini
+ChatGPT
+CVE Feeds
+09:15
+🔍
+Proactive Threat Hunt
+Hunt for IOCs and anomalous behavior patterns automated rules might miss, mapped against MITRE ATT&amp;CK TTPs. Correlate IOC/IOA-based detections across SumoLogic and Log360, building or refining use-cases as patterns emerge.
+MITRE ATT&amp;CK
+SumoLogic
+Log360
+10:30
+☁️
+Cloud &amp; WAF Posture Review
+Check Azure and AWS (EC2, S3, CloudWatch, IAM) for drift, review Defender XDR alerts, and audit Cloudflare WAF and Akamai rules. Update IP blacklisting and DDoS mitigation thresholds as new threat intel comes in from Site24x7.
+Azure
+AWS
+Defender XDR
+Cloudflare WAF
+Akamai
+11:30
+⚙️
+SIEM Rule &amp; Correlation Tuning
+Refine correlation rule logic and Wazuh ML baselines to cut false positives without losing real signal. This is where the 30% FP reduction came from, scripted and validated using Python and PowerShell before deployment.
+Wazuh ML
+Python
+PowerShell
+12:30
+🥗
+Lunch, AI Runs in the Background Too
+Even off the clock, AI shows up: I&#x27;ll ask Claude or Gemini to summarize a long article I didn&#x27;t have time to read, draft a quick reply email, or plan a workout split. Same tools, completely different problem space.
+Claude
+Gemini
+13:15
+🤖
+AI-Assisted Log Correlation
+Use ChatGPT and Gemini to accelerate log correlation across Windows Event Logs, Syslog, firewall, EDR/XDR, proxy, and cloud logs, summarize TTPs, and draft the technical sections of incident reports before I review and tighten them.
+ChatGPT
+Gemini
+Windows Event Logs
+14:15
+🛡️
+VAPT &amp; Vulnerability Validation
+Run targeted scans and manual checks with Nessus, Nmap, Burp Suite, OWASP ZAP, and SQLMap. Validate findings against Metasploit where exploitation needs confirming, then document severity using CVSS-aligned scoring.
+Nessus
+Nmap
+Burp Suite
+OWASP ZAP
+SQLMap
+Metasploit
+15:30
+🚨
+Incident Response, When It&#x27;s Real
+When something real fires, contain, collect evidence with Wireshark and Autopsy, eradicate, and document the timeline in The Hive while it&#x27;s fresh. Cross-reference indicators against MISP for related campaign activity.
+Wireshark
+Autopsy
+The Hive
+MISP
+16:30
+📋
+GRC &amp; Compliance Work
+Rotate into GRC tasks: mapping controls against ISO/IEC 27001:2022, NIST, and CIS benchmarks, checking Bitsight ratings, and updating RCA documentation and tickets in Jira and Confluence for ongoing audits.
+ISO 27001
+NIST
+CIS
+Jira
+Confluence
+17:30
+📊
+Reporting &amp; Handover
+Compile the day&#x27;s findings into stakeholder-ready reports using AI to draft the first pass and cut documentation time significantly, update playbooks in The Hive, and brief the next shift on anything still open.
+Reporting
+The Hive
+AI Drafting
+19:00
+📚
+Evening: Learning &amp; Side Projects
+Most evenings go to certifications, CTF practice, or building small automation scripts. AI shows up again here too, helping me scaffold Python tooling faster or explain a concept I want to go deeper on, this time entirely self-directed.
+Python
+Bash
+Self-Study
+Career Journey
+Interactive Timeline
+Drag to explore, click any milestone for details.
+2021
+B.Sc. Forensic Science
+Cyber Forensics Track
+🎓 Degree
+Apr 2023
+Computer Forensic Analyst
+Regional Forensic Lab
+🔬 Forensics
+May 2023
+Cybersecurity Analyst
+Cyber Octet Pvt Ltd
+🛡️ Intern
+Nov 2023
+SOC Analyst
+Chaitanya Cyber Strix
+🔍 SOC
+Dec 2023
+Compliance Intern
+Sannibh Technologies
+📋 GRC
+Dec 2023
+Cybersecurity Intern
+Cyber Secured India
+⚔️ VAPT
+2024
+Gold Medal: 9.47 CGPA
+B.Sc. Graduation
+🥇 Gold
+2024 to 2026
+M.S. Cybersecurity
+Postgraduate Degree
+🎓 Masters
+May 2024 to NOW
+Assoc. SOC Engineer
+Investis Digital (IDX)
+● Current</pre></article></main><footer class="footer"><div class="footerin"><div>© 2026 Aditya Kumar Goswami · Associate SOC Engineer · Gold Medalist · AI-Augmented Security</div><div class="footerlinks"><a href="https://github.com/AdityaKGoswami">GitHub</a><a href="mailto:aadityakgoswami@gmail.com">Email</a></div></div></footer><script src="../assets/site.js"></script></body></html>

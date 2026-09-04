@@ -1,1 +1,0 @@
-document.addEventListener('DOMContentLoaded',()=>{const m=document.querySelector('.menu'),n=document.querySelector('.links');if(m&&n)m.addEventListener('click',()=>n.classList.toggle('open'));document.querySelectorAll('a[href]').forEach(a=>{if(a.hostname===location.hostname&&a.pathname.endsWith('/'))a.addEventListener('click',()=>{});});});

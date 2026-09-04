@@ -1,0 +1,243 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Aditya Goswami — Case Studies & Incidents."><link rel="canonical" href="https://adityakgoswami.github.io/Portfolio/case-studies/"><link rel="stylesheet" href="../assets/styles.css"><title>Case Studies &amp; Incidents · Aditya Goswami</title></head><body><header class="site-header"><div class="nav"><a class="brand" href="../"><span class="pulse"></span>Aditya Kumar Goswami</a><button class="menu" aria-label="Menu">Menu</button><nav class="links"><a href="../">Home</a><a href="../about/">About</a><a href="../experience/">Experience</a><a href="../skills/">Skills</a><a href="../ai-security/">AI Security</a><a href="../projects/">Projects</a><a href="../research/">Research</a><a href="../speaking/">Speaking</a><a href="../resources/">Resources</a><a href="../contact/">Contact</a><a href="../extras/">Extras</a></nav></div></header><main><section class="hero"><div class="eyebrow">FULL SOURCE CONTENT</div><h1>Case Studies &amp; Incidents</h1><p class="lead">Original source-index material, retained in full and reorganized for the new GitHub Pages staging site.</p></section><article class="source-section"><div class="section-label">SOURCE MATERIAL</div><pre class="source-copy">Case Study
+Real Incident Deep-Dive
+A walk-through of a real enterprise threat I detected, investigated, and resolved, anonymized for confidentiality.
+01
+Initial Detection
+Anomalous WAF traffic pattern triggers Cloudflare alert at 02:14 AM
+02
+Log Analysis &amp; Triage
+Kibana SIEM correlation across ALB, CDN, and IIS logs reveals coordinated attack
+03
+Threat Intelligence
+SOCRadar identifies threat actor infrastructure; ChatGPT used to summarize TTPs
+04
+Containment &amp; Response
+IP blocks deployed, WAF rules updated, PagerDuty incident escalated
+05
+Post-Incident Report
+LLM-generated draft reviewed and submitted within 40 minutes of resolution
+STEP 01: DETECTION
+Coordinated DDoS + WAF Evasion Attack
+At 02:14 AM, Cloudflare WAF flagged a 340% spike in requests targeting a client&#x27;s login endpoint from 47 distinct ASNs, a classic distributed low-and-slow credential stuffing pattern designed to evade volume-based thresholds.
+Attack vector: Credential stuffing via rotating residential proxies
+Target: Enterprise e-commerce login page across 3 regions
+Volume: ~18,000 requests/minute at peak
+Evasion technique: Varied User-Agent strings and request timing
+18K
+Req/min at peak
+47
+Distinct ASNs
+🔧 The Detection Rule That Came Out of This Incident
+After this attack, the existing WAF rule was too broad and generated noisy false positives. Here&#x27;s the actual before/after.
+Before: 41% false positive rate
+After: 6% false positive rate
+12
+−
+rule: rate_limit(requests &gt; 100, window=60s, scope=ip)
+13
+−
+action: block_ip(duration=300s)
+12
++
+rule: rate_limit(requests &gt; 100, window=60s, scope=asn_cluster)
+13
++
+rule: behavioral_score(ua_entropy &gt; 0.7, timing_variance &lt; 200ms)
+14
++
+action: challenge(type=js_proof_of_work)
+// soft block before hard block
+15
++
+escalation: block_ip(duration=300s)
+// only after challenge failure
+Why this mattered:
+the original rule blocked by single IP, which is useless against rotating residential proxies. The fix clusters by ASN behavior and adds a JS proof-of-work challenge as a soft gate before a hard IP block, legitimate users pass invisibly, automated clients get stuck on the challenge.
+Deep Dive Case Studies
+Real Incident Analysis
+Detailed post-incident analysis of major cybersecurity events — combining public information with SOC-perspective investigation methodology. All cases use real documented incidents.
+🔴 P1 — Critical
+June 2022 · Real Incident
+Cloudflare BGP Route Leak — Global Service Disruption
+Incident Scenario
+A Cloudflare network partner accidentally announced a subset of Cloudflare&#x27;s IP prefixes to their upstream BGP peers without proper filtering. The leaked routes propagated globally, causing major traffic disruption for approximately 50 minutes affecting millions of users.
+SOC Investigation Timeline
+T+0:00
+Anomaly detected — sudden spike in latency alerts across CDN monitoring. Multiple customers reporting connectivity failures.
+T+0:08
+Network team identifies BGP route anomalies. Traceroutes showing unexpected ASN hops — traffic being misrouted through unknown autonomous systems.
+T+0:22
+Root cause identified: BGP route leak from transit partner. NOT a cyberattack. Containment begins — affected prefixes withdrawn.
+T+0:50
+Full service restoration. Post-incident: BGP route filtering policies hardened, RPKI implementation accelerated.
+MITRE ATT&amp;CK Relevance
+T1584.001 – Acquire Infrastructure
+T1557 – Adversary-in-the-Middle
+Network Architecture Review
+Key Lessons for SOC Teams
+BGP anomalies require a dedicated runbook — they look like attacks but often aren&#x27;t. Misclassification wastes critical response time.
+RPKI (Resource Public Key Infrastructure) validation prevents route leak propagation — a must-have for any organization operating internet infrastructure.
+Distinguish between infrastructure disruption and security incident from the first alert — the response playbooks are fundamentally different.
+🟡 P1 — High
+January 2023 · Real Incident
+Microsoft 365 Worldwide Outage — WAN Routing Change
+Incident Scenario
+A WAN routing configuration change deployed by Microsoft caused widespread Microsoft 365 service degradation globally. Exchange Online, Teams, SharePoint Online and Outlook were affected for enterprise customers across multiple continents for approximately 3–4 hours.
+SOC Investigation Timeline
+T+0:00
+Help desk flooded with email and Teams access failures. SIEM shows authentication anomalies — Azure AD sign-in failures spiking across tenant.
+T+0:15
+SOC initially investigates as potential credential stuffing attack. Hunt reveals failures are global, not user-specific — eliminates targeted attack hypothesis.
+T+0:30
+Microsoft Service Health Dashboard confirms widespread outage. SOC pivots from attack investigation to business continuity response.
+T+3:50
+Microsoft rolls back WAN configuration change. Services restored progressively. Post-incident review initiated.
+MITRE ATT&amp;CK Relevance
+T1486 – Data Encrypted for Impact (initial hypothesis)
+T1531 – Account Access Removal
+Cloud Resilience Planning
+Key Lessons for SOC Teams
+Mass authentication failures are ambiguous — always check vendor status pages before escalating to incident response. False incident classification is expensive.
+Cloud dependency creates shared-fate scenarios. A single provider outage can simultaneously affect email, collaboration, authentication, and backup systems.
+Business continuity playbooks for cloud provider outages must be tested regularly — most organizations only discover gaps during actual outages.
+🔴 P2 — High
+Hypothetical · Based on Real TTPs
+AI-Assisted Credential Stuffing Attack — Enterprise SaaS Environment
+Incident Scenario
+A threat actor uses LLM-generated, contextually personalized phishing lures combined with credential stuffing from a recent data breach. Rotating proxy infrastructure defeats rate-limiting. Authentication anomaly detection initially misses the slow, distributed attack pattern.
+SOC Investigation Timeline
+T+0:00
+Wazuh alert: unusual login geography for 3 accounts. Each account shows single successful auth from new country — individually below threshold, collectively suspicious.
+T+0:25
+Correlation query reveals 47 accounts with similar pattern over 6 hours. MISP lookup: source IPs match known credential stuffing infrastructure. Incident declared.
+T+1:10
+Affected accounts force-reset. MFA enforcement expanded. Detection rule updated: geographic anomaly + new device + no MFA = automatic account lock + alert.
+T+4:00
+Root cause confirmed via threat intel: credentials from 2024 breach of third-party HR platform. Vendor notified. All affected users required password reset.
+MITRE ATT&amp;CK Mapping
+T1110.004 – Credential Stuffing
+T1586.002 – Compromise Accounts
+T1078 – Valid Accounts
+TA0001 – Initial Access
+Key Lessons for SOC Teams
+Individual threshold-based alerts miss distributed attacks. Correlation rules that look at patterns across accounts over time are essential for credential stuffing detection.
+Threat intelligence integration is not optional — without the MISP IOC lookup, this investigation would have taken 4x longer to attribute.
+MFA is your last line of defense after credentials are compromised. Universal MFA enforcement is non-negotiable in 2026.
+Incident Analysis
+Real Incident Deep-Dives
+Detailed post-incident analysis of real security events — some anonymized from SOC experience, some from major public breaches reconstructed from verified reports. Every timeline, finding, and lesson here is grounded in actual events.
+☁️ Cloudflare DNS Outage 2023
+🚨 CrowdStrike BSOD 2024
+🔐 Credential Stuffing (Anon)
+⛓️ Supply Chain Attack (Anon)
+🔴 Critical — Internet-Scale Outage
+Cloudflare · June 2023 · BGP Misconfiguration
+Scenario Overview
+On June 27, 2023, Cloudflare experienced a significant outage affecting numerous services globally. The root cause was a BGP routing change made during a network infrastructure update that inadvertently withdrew routes, causing Cloudflare&#x27;s edge network to become unreachable from large portions of the internet. Services including Cloudflare DNS (1.1.1.1), Zero Trust, and Cloudflare Workers were affected for approximately 37 minutes.
+Incident Timeline
+06:27 UTC
+BGP route withdrawal propagates globally — Cloudflare edge nodes lose upstream reachability
+06:29 UTC
+Automated monitoring fires P0 alerts across Cloudflare NOC
+06:31 UTC
+On-call engineers paged; initial hypothesis: DDoS or transit provider failure
+06:34 UTC
+Root cause identified as internal BGP change from infrastructure team
+06:58 UTC
+Route re-advertisement complete — services recovering
+07:04 UTC — Full service restoration confirmed
+SOC Analysis: What Would I Have Done?
+01
+Immediate Triage — Distinguish Attack from Operational Error
+First 3 minutes: check for concurrent DDoS telemetry (Suricata, Cloudflare WAF), validate upstream BGP peer status across multiple IXPs, cross-check with change management tickets. The presence of a simultaneous internal change request would shift classification from &quot;attack&quot; to &quot;operational incident&quot; immediately.
+02
+Detection Gap — Change-Correlated Outage
+A mature SOC would have a CI/CD-to-SIEM integration: any network change ticket automatically creates a monitoring window with elevated sensitivity. This outage had a 2-minute gap between the change and the first alert — with integration, that closes to near-zero.
+03
+Lesson for Detection Engineering
+BGP route withdrawal is a detectable event. A Sigma rule watching for simultaneous loss of reachability across multiple anycast nodes with no external DDoS correlation is a valid detection primitive that most enterprise SOCs don&#x27;t have written.
+Relevant MITRE:
+T1498 — Network DoS
+T1565 — Data Manipulation
+Operational Error — Not ATT&amp;CK
+🔴 Critical — Largest IT Outage in History
+CrowdStrike Falcon · July 19, 2024 · Faulty Content Update
+Scenario Overview
+On July 19, 2024, CrowdStrike deployed a Falcon sensor content update (channel file 291) containing a logic error that caused Windows systems running Falcon to kernel panic (BSOD) on boot. The update propagated to approximately 8.5 million Windows endpoints globally in under 90 minutes, affecting airlines, hospitals, banks, broadcasters, and emergency services. Recovery required manual physical access to each affected machine — a BitLocker key and safe-mode boot to delete the faulty file. The estimated economic damage exceeded $10 billion.
+Incident Timeline
+04:09 UTC
+Channel file 291 pushed globally to all Falcon sensors — update contains null pointer dereference
+04:11 UTC
+First BSOD reports appear on internal monitoring — initially dismissed as isolated
+04:27 UTC
+Mass BSOD reports flood in globally — CrowdStrike declares critical incident
+04:29 UTC
+Update reverted — but 8.5M endpoints already affected and cannot receive the fix at boot
+05:00+ UTC
+Manual remediation begins worldwide — days-long recovery process
+SOC Analysis &amp; Lessons
+01
+Staged Rollout — The Missing Safeguard
+The update went to all endpoints simultaneously with no canary deployment. A phased rollout (1% → 5% → 25% → global) with automated BSOD rate monitoring at each stage would have stopped this at 1% penetration — affecting ~85,000 endpoints instead of 8.5 million.
+02
+Detection: Mass BSOD is a Detection Rule
+A Wazuh/Sentinel alert firing on &gt;50 Windows kernel crash events across an estate in under 5 minutes with a common driver/update correlation would have flagged this as a supply chain event — even if the vendor didn&#x27;t. Enterprise SOCs should have this detection.
+03
+Business Continuity Planning — The Real Gap
+The multi-day recovery proved most organizations had no tested procedure for &quot;EDR kills all Windows endpoints simultaneously.&quot; BCP drills should include this scenario. Physical access + BitLocker key management procedures should be documented and accessible offline.
+Relevant MITRE:
+T1195.002 — Supply Chain: Software
+T1490 — Inhibit System Recovery
+Supply Chain Risk
+🟠 High — Anonymized SOC Incident
+Enterprise · 2024 · Credential Stuffing via Rotating Proxy Infrastructure
+Scenario Overview
+An anonymized credential-stuffing campaign against an enterprise web application, detected during active SOC monitoring. The attacker used a distributed proxy network across 6 countries with request rates carefully tuned below WAF thresholds. Initial detection failed — the campaign was discovered during a routine threat hunt. This scenario directly informed the detection rule improvements documented in the &quot;Mistakes&quot; section.
+Attack &amp; Detection Timeline
+Day 0
+Attacker begins slow credential stuffing — 2-3 attempts/IP/hour across 340 rotating IPs. Below WAF threshold (default: 10/min/IP).
+Day 4
+Existing detection rule misses attack — rule requires 5 failures from single IP within 5 minutes. Distributed pattern evades this entirely.
+Day 6
+Routine threat hunt cross-correlates ALB logs with authentication events. Pattern identified: 847 unique IPs targeting /api/login, all with near-identical User-Agent strings.
+Day 6 + 2h
+Cloudflare WAF rule deployed: block IPs with &gt;2 failed auth attempts per 24h across any session. Attack blocked.
+Accounts force-reset. MFA enforcement accelerated. New detection rule deployed to SIEM.
+Detection Engineering Response
+01
+New Sigma Rule: Distributed Credential Stuffing
+Detection logic shifted from per-IP rate to aggregate endpoint failure rate: &gt;200 unique source IPs generating authentication failures against a single endpoint within 1 hour triggers high-severity alert. Covers distributed patterns that single-IP rules miss entirely.
+02
+User-Agent Clustering as IOC
+Credential stuffing tools often produce statistically homogeneous User-Agent distributions. A KQL query clustering Auth failures by User-Agent entropy (low entropy = suspicious) is now part of the standard hunting playbook.
+MITRE ATT&amp;CK:
+T1110.004 — Credential Stuffing
+T1078 — Valid Accounts
+T1133 — External Remote Services
+🔴 Critical — Hypothetical Scenario (Realistic)
+SaaS Vendor Supply Chain · 2025 Threat Pattern · Fictitious but Plausible
+Scenario Overview
+⚠️ This is a hypothetical scenario constructed from real threat patterns documented by CISA, ENISA, and public breach reports. All organizations and individuals are fictitious.
+A SaaS provider used by a mid-size enterprise for HR data processing is compromised via a malicious npm package introduced during a dependency update. The attacker uses the vendor&#x27;s update delivery mechanism as a beachhead to reach downstream enterprise environments — a classic software supply chain attack following the SolarWinds and 3CX pattern.
+Attack Timeline
+T-30 days
+Threat actor compromises vendor CI/CD pipeline via stolen developer credentials. Malicious backdoor inserted into update package — passes existing code review due to obfuscation.
+T-0
+Vendor pushes update to 2,000 enterprise clients. Malicious code establishes encrypted C2 channel via DNS over HTTPS (DoH) — evades standard DNS monitoring.
+T+3 days
+CISA advisory published — enterprise SOC correlates the IoCs against their environment. C2 traffic identified in Zeek/Suricata logs via JA3 fingerprint matching.
+T+3 + 4h
+Vendor application isolated. Network segmentation prevents lateral movement. Threat hunt reveals no data exfiltration in the 3-day window.
+Containment complete. Vendor application rebuilt from verified source. SBOM review initiated for all remaining SaaS dependencies.
+Key Lessons for Enterprise SOC
+01
+Vendor Risk = Attack Surface
+Every SaaS tool in an enterprise environment is a potential supply chain vector. SBOM (Software Bill of Materials) tracking for critical vendors, combined with CISA KEV monitoring for vendor-specific CVEs, should be a standard SOC responsibility — not just a procurement checklist item.
+02
+DoH as a C2 Evasion Technique
+DNS over HTTPS tunneling bypasses traditional DNS monitoring. Detection requires JA3/JA3S fingerprinting in Suricata or Zeek, combined with flow volume analysis on known DoH provider IPs (8.8.8.8, 1.1.1.1 over 443) at anomalous volumes.
+MITRE ATT&amp;CK:
+T1195.002 — Supply Chain: Software
+T1568 — Dynamic Resolution
+T1071.004 — DNS Application Protocol
+T1090 — Proxy</pre></article></main><footer class="footer"><div class="footerin"><div>© 2026 Aditya Kumar Goswami · Associate SOC Engineer · Gold Medalist · AI-Augmented Security</div><div class="footerlinks"><a href="https://github.com/AdityaKGoswami">GitHub</a><a href="mailto:aadityakgoswami@gmail.com">Email</a></div></div></footer><script src="../assets/site.js"></script></body></html>
